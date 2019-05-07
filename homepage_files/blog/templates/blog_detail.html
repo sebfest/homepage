@@ -1,0 +1,27 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load bootstrap4 %}
+
+{% block title %}Sebastian Fest - Blog{% endblock %}
+
+{% block main_title %}{{ post.title }}{% endblock %}
+
+{% block sub_title %}{{ post.subtitle }}{% endblock %}
+
+{% block content %}
+    <article>
+        <div class="container">
+            <div class="row">
+                <div class="col-lg-8 col-md-10 mx-auto">
+                    {% if post %}
+                        {{ post.formatted_markdown | safe }}
+                    {% else %}
+                        <h3 class="post-title">Sorry, nothing here.</h3>
+                    {% endif %}
+                </div>
+            </div>
+        </div>
+    </article>
+{% endblock %}

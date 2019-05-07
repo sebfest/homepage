@@ -1,0 +1,81 @@
+<!DOCTYPE html>
+
+{% load static %}
+
+{% load bootstrap4 %}
+
+<html {% if request.LANGUAGE_CODE %} lang="{{ request.LANGUAGE_CODE }}" {% endif %}>
+
+<!-- Head-->
+<head>
+
+    <meta charset="utf-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1, shrink-to-fit=no">
+    <meta name="description" content="My personal profile">
+    <meta name="author" content="Sebastian Fest">
+    <meta name="keywords" content="Python,Django,Latex,Economics">
+
+    <!-- Extra header for page refresh -->
+    {% block head_extra %}{% endblock %}
+
+    <title>{% block title %}Sebastian Fest{% endblock %}</title>
+
+    <!-- Bootstrap core CSS -->
+    {% bootstrap_css %}
+
+    <!-- Custom fonts for this template -->
+    <link href={% static 'blog/vendor/fontawesome-free/css/all.min.css' %} rel="stylesheet" type="text/css">
+    <link href='https://fonts.googleapis.com/css?family=Lora:400,700,400italic,700italic' rel='stylesheet'
+          type='text/css'>
+    <link href='https://fonts.googleapis.com/css?family=Open+Sans:300italic,400italic,600italic,700italic,800italic,400,300,600,700,800'
+          rel='stylesheet' type='text/css'>
+
+    <!-- Custom styles for this template -->
+    <link href={% bootstrap_theme_url %} rel="stylesheet">
+
+    <!-- Custom styles for code highlight -->
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/styles/xcode.min.css">
+
+</head>
+
+<body>
+
+<!-- Navigation -->
+{% include 'navbar.html' %}
+
+<!-- Page Header -->
+<header class="masthead" style="background-color: #b3d7ff">
+    <div class="overlay"></div>
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <div class="site-heading">
+                    <h1>{% block main_title %}Blog{% endblock %}</h1>
+                    <span class="subheading">{% block sub_title %}{% endblock %}</span>
+                </div>
+            </div>
+        </div>
+    </div>
+</header>
+
+<!-- Main content -->
+{% block content %} Here is the main content {% endblock %}
+
+<hr>
+
+<!-- Footer -->
+{% include 'footer.html' %}
+
+<!-- Bootstrap core JavaScript -->
+{% bootstrap_javascript jquery=True %}
+
+<!-- Custom scripts for this template -->
+<script src={% static 'blog/js/clean-blog.min.js' %}></script>
+
+<!-- Code highlighting -->
+<script charset="UTF-8" src="https://cdnjs.cloudflare.com/ajax/libs/highlight.js/9.15.6/highlight.min.js"></script>
+<script>hljs.initHighlightingOnLoad();</script>
+
+</body>
+
+</html>

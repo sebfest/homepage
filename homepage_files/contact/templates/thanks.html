@@ -1,0 +1,23 @@
+{% extends 'base.html' %}
+
+{% load static %}
+
+{% load bootstrap4 %}
+
+{% block title %}Sebastian Fest - Contact{% endblock %}
+
+{% block main_title %}Contact{% endblock %}
+
+{% block head_extra %}
+    <meta http-equiv="refresh" content="5;url={% url 'blog:index' %}">
+{% endblock %}
+
+{% block content %}
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+            {% bootstrap_messages %}
+            </div>
+        </div>
+    </div>
+{% endblock %}
