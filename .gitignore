@@ -4,6 +4,7 @@ __pycache__
 db.sqlite3
 .DS_Store
 credential.py
+email_info.py
 
 static/
 media/
