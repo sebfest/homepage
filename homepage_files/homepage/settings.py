@@ -2,10 +2,8 @@ import os
 
 from django.utils import timezone
 
-# Build paths inside the project like this: os.path.join(BASE_DIR, ...)
 BASE_DIR = os.path.dirname(os.path.dirname(os.path.abspath(__file__)))
 
-# SECURITY WARNING: keep the secret key used in production secret!
 from .credential import SECRET_KEY
 SECRET_KEY = SECRET_KEY
 
@@ -27,8 +25,11 @@ INSTALLED_APPS = [
     'django.contrib.sessions',
     'django.contrib.messages',
     'django.contrib.staticfiles',
+    'django.contrib.sites',
+    'django.contrib.flatpages',
 
     #Third party apps
+    'disqus',
     'markdownx',
     'bootstrap4',
     'tagulous',
@@ -51,6 +52,7 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
+    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
     'debug_toolbar.middleware.DebugToolbarMiddleware',
 ]
 
@@ -76,7 +78,6 @@ WSGI_APPLICATION = 'homepage.wsgi.application'
 
 
 # Database
-
 DATABASES = {
     'default': {
         'ENGINE': 'django.db.backends.sqlite3',
@@ -85,7 +86,6 @@ DATABASES = {
 }
 
 # Password validation
-
 AUTH_PASSWORD_VALIDATORS = [
     {
         'NAME': 'django.contrib.auth.password_validation.UserAttributeSimilarityValidator',
@@ -102,34 +102,27 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 #User model
-
 AUTH_USER_MODEL = 'auth.User'
 
 # Internationalization
-
 LANGUAGE_CODE = 'en-us'
-
 TIME_ZONE = 'Europe/Berlin'
-
 USE_I18N = True
-
 USE_L10N = True
-
 USE_TZ = True
 
+# Django sites
+SITE_ID = 1
 
 # Static files (CSS, JavaScript, Images)
-
 STATIC_URL = '/static/'
 STATIC_ROOT = os.path.join(BASE_DIR, 'static')
 
 # Media files (.jpg, .pdf)
-
 MEDIA_URL = '/media/'
-MEDIA_ROOT = os.path.join(BASE_DIR, 'media/')
+MEDIA_ROOT = os.path.join(BASE_DIR, 'media')
 
-# Markdown x settings
-
+# Markdownx settings
 MARKDOWNX_MARKDOWN_EXTENSIONS = [
     'extra',
 ]
@@ -140,14 +133,18 @@ MARKDOWNX_IMAGE_MAX_SIZE = {
 }
 
 # Bootstrap4
-
 BOOTSTRAP4 = {
     'theme_url': '/static/blog/css/clean-blog.css',
     'include_jquery': True,
 }
 
-#Email configuration
+#Disquss
+from .disqus_info import *
 
+DISQUS_API_KEY = DISQUS_API_KEY
+DISQUS_WEBSITE_SHORTNAME = DISQUS_WEBSITE_SHORTNAME
+
+#Email configuration
 from .email_info import *
 
 EMAIL_BACKEND = EMAIL_BACKEND
@@ -159,11 +156,9 @@ EMAIL_PORT = EMAIL_PORT
 DEFAULT_FROM_EMAIL = EMAIL_HOST_USER
 
 # Debug toolbar
-
 INTERNAL_IPS = ALLOWED_HOSTS
 
 #Tagolous
-
 SERIALIZATION_MODULES = {
     'xml':    'tagulous.serializers.xml_serializer',
     'json':   'tagulous.serializers.json',

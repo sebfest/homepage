@@ -4,12 +4,12 @@
 
 {% load bootstrap4 %}
 
-{% block title %}Sebastian Fest - Contact{% endblock %}
+{% block title %}{{ block.super }} - Contact{% endblock %}
 
 {% block main_title %}Contact{% endblock %}
 
 {% block head_extra %}
-    <meta http-equiv="refresh" content="5;url={% url 'blog:index' %}">
+    <meta http-equiv="refresh" content="5; url={% url 'blog:post_list' %}">
 {% endblock %}
 
 {% block content %}

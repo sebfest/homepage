@@ -5,13 +5,13 @@ from blog.models import Post
 
 class PostListView(ListView):
     model = Post
-    template_name = 'blog.html'
+    template_name = 'blog_index.html'
     context_object_name = 'post_list'
     paginate_by = 3
 
 
 class PostTagListView(ListView):
-    template_name = 'blog.html'
+    template_name = 'blog_index.html'
     context_object_name = 'post_list'
     paginate_by = 3
 
@@ -36,7 +36,3 @@ class PostDetailView(DetailView):
         post.last_viewed()
         post.increment_views()
         return post
-
-
-class AboutView(TemplateView):
-    template_name = "about.html"

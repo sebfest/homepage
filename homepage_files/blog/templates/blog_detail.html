@@ -4,6 +4,8 @@
 
 {% load bootstrap4 %}
 
+{% load disqus_tags %}
+
 {% block title %}Sebastian Fest - Blog{% endblock %}
 
 {% block main_title %}{{ post.title }}{% endblock %}
@@ -15,11 +17,18 @@
         <div class="container">
             <div class="row">
                 <div class="col-lg-8 col-md-10 mx-auto">
+
                     {% if post %}
                         {{ post.formatted_markdown | safe }}
                     {% else %}
                         <h3 class="post-title">Sorry, nothing here.</h3>
                     {% endif %}
+
+                    {% if post.enable_comments %}
+                        <h2 class="section-heading" style="padding-top: 20px">Comments</h2>
+                        {% disqus_show_comments %}
+                    {%  endif %}
+
                 </div>
             </div>
         </div>
