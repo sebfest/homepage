@@ -12,3 +12,4 @@ disqus_info.py
 #Folders
 static/
 media/
+migrations/*
