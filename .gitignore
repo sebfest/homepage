@@ -4,9 +4,11 @@ __pycache__
 db.sqlite3
 .DS_Store
 
+# credentials
 credential.py
 email_info.py
-disqus_info
+disqus_info.py
 
+#Folders
 static/
 media/
