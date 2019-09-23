@@ -1,0 +1,2 @@
+DISQUS_API_KEY = 'test'
+DISQUS_WEBSITE_SHORTNAME = 'homepage'
