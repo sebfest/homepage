@@ -11,10 +11,7 @@ SECRET_KEY = SECRET_KEY
 DEBUG = True
 
 #Hosts
-ALLOWED_HOSTS = []
-
-if DEBUG:
-    ALLOWED_HOSTS += ['127.0.0.1',]
+ALLOWED_HOSTS = ['127.0.0.1', '.pythonanywhere.com']
 
 # Application definition
 
@@ -61,7 +58,7 @@ ROOT_URLCONF = 'homepage.urls'
 TEMPLATES = [
     {
         'BACKEND': 'django.template.backends.django.DjangoTemplates',
-        'DIRS': [os.path.join(BASE_DIR, 'templates')]   ,
+        'DIRS': [os.path.join(BASE_DIR, 'templates')],
         'APP_DIRS': True,
         'OPTIONS': {
             'context_processors': [
@@ -134,7 +131,6 @@ MARKDOWNX_IMAGE_MAX_SIZE = {
 
 # Bootstrap4
 BOOTSTRAP4 = {
-    'theme_url': '/static/blog/css/clean-blog.css',
     'include_jquery': True,
 }
 
