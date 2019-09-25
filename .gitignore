@@ -6,15 +6,17 @@ db.sqlite3
 .DS_Store
 
 # credentials
-#credential.py
-#email_info.py
-#disqus_info.py
-info.py
+credential.py
+email_info.py
+disqus_info.py
 
 #Folders
 static/
 media/
+migrations/
 migrations/*
+
+
 
 
 
