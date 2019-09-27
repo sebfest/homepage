@@ -6,9 +6,9 @@ db.sqlite3
 .DS_Store
 
 # credentials
-homepage/credential.py
-homepage/email_info.py
-homepage/disqus_info.py
+credential.py
+email_info.py
+disqus_info.py
 
 #Folders
 static/
