@@ -17,7 +17,7 @@
                 <form id="contactForm" method="post" action="{% url 'contact:contact' %}">
                 {% csrf_token %}
                 {% bootstrap_form_errors form type="all" layout='inline' %}
-                {% bootstrap_form form show_help=False show_label=True set_required=True size='large' layout="horizontal" %}
+                {% bootstrap_form form form_group_class='form-group' show_help=False show_label=True set_required=True size='large' layout="horizontal" %}
                 <br>
                 <div class="row">
                     <div class="form-group">
