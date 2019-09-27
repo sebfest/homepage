@@ -20,7 +20,8 @@
                             <div class="card">
                                 <div class="card-header" id="heading_{{ paper.id }}">
                                     <h2 class="mb-0">
-                                        <button class="btn btn-link collapsed" type="button" data-toggle="collapse"
+                                        <button class="btn btn-link collapsed text-left" style="white-space: normal;"
+                                                type="button" data-toggle="collapse"
                                                 data-target="#collapse_{{ paper.id }}" aria-expanded="false"
                                                 aria-controls="collapseOne">
                                             {{ paper.title|linebreaksbr }}
@@ -30,43 +31,45 @@
                                 <div id="collapse_{{ paper.id }}" class="collapse"
                                      aria-labelledby="heading_{{ paper.id }}" data-parent="#accordion">
                                     <div class="card-body">
-                                        <table class="table table-hover text-justify">
-                                            <tbody>
-                                            <tr>
-                                                <td>
-                                                    {% if paper.authors.all|length > 1 %}
-                                                        Authors:
-                                                    {% else %}
-                                                        Author:
-                                                    {% endif %}</td>
-                                                <td>{{ paper.author_names }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Version:</td>
-                                                <td>{{ paper.modified_date|date:"F Y" }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>
-                                                    {% if paper.keywords.all|length > 1 %}
-                                                        Keywords:
-                                                    {% else %}
-                                                        Keyword:
-                                                    {% endif %}
-                                                </td>
-                                                <td>
-                                                    {{ paper.keyword_list|title }}
-                                                </td>
-                                            </tr>
-                                            <tr>
-                                                <td>Abstract:</td>
-                                                <td>{{ paper.abstract }}</td>
-                                            </tr>
-                                            <tr>
-                                                <td>Status:</td>
-                                                <td>{{ paper.get_papertype_display }}</td>
-                                            </tr>
-                                            </tbody>
-                                        </table>
+                                        <div class="table-responsive">
+                                            <table class="table table-hover text-justify">
+                                                <tbody>
+                                                <tr>
+                                                    <td>
+                                                        {% if paper.authors.all|length > 1 %}
+                                                            Authors:
+                                                        {% else %}
+                                                            Author:
+                                                        {% endif %}</td>
+                                                    <td>{{ paper.author_names }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Version:</td>
+                                                    <td>{{ paper.modified_date|date:"F Y" }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>
+                                                        {% if paper.keywords.all|length > 1 %}
+                                                            Keywords:
+                                                        {% else %}
+                                                            Keyword:
+                                                        {% endif %}
+                                                    </td>
+                                                    <td>
+                                                        {{ paper.keyword_list|title }}
+                                                    </td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Abstract:</td>
+                                                    <td>{{ paper.abstract }}</td>
+                                                </tr>
+                                                <tr>
+                                                    <td>Status:</td>
+                                                    <td>{{ paper.get_papertype_display }}</td>
+                                                </tr>
+                                                </tbody>
+                                            </table>
+                                        </div>
                                         <hr>
                                         <div class="btn-group btn-group-sm" role="group" aria-label="button group">
                                             {% if paper.pdf %}
@@ -81,7 +84,8 @@
                                             {% endif %}
                                             {% if paper.project_link %}
                                                 <a href="{{ paper.project_link }}" target="_blank"
-                                                   class="btn btn-default"><i class="fa fa-folder" aria-hidden="true"></i>
+                                                   class="btn btn-default"><i class="fa fa-folder"
+                                                                              aria-hidden="true"></i>
                                                     Source</a>
                                             {% endif %}
 
