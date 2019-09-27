@@ -13,8 +13,11 @@ disqus_info.py
 #Folders
 static/
 media/
-migrations/
-migrations/*
+/homepage_files/research/migrations/*
+/homepage_files/blog/migrations/*
+
+
+
 
 
 
