@@ -13,14 +13,4 @@ homepage/disqus_info.py
 #Folders
 static/
 media/
-/homepage_files/research/migrations/*
-/homepage_files/blog/migrations/*
-
-
-
-
-
-
-
-
-/homepage_files/blog/migrations/
+migrations/*

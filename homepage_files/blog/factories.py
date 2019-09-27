@@ -48,7 +48,7 @@ class PostFactory(DjangoModelFactory):
 
     is_active = LazyAttribute(lambda o: fake.boolean(chance_of_getting_true=80))
     views = LazyAttribute(lambda o: random.randint(0, 100))
-    last_accessed = LazyAttribute(lambda o: o.created_date + datetime.timedelta(days=random.randint(1, 4)))
+    last_viewed = LazyAttribute(lambda o: o.created_date + datetime.timedelta(days=random.randint(1, 4)))
 
 
 

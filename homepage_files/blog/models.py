@@ -1,3 +1,4 @@
+from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -61,11 +62,11 @@ class Post(AbstractBaseModel):
         editable=False,
         help_text=_('Number of views'),
     )
-    last_accessed = models.DateTimeField(
+    last_viewed = models.DateTimeField(
         blank=True,
         null=True,
         editable=False,
-        help_text=_('Last accessed'),
+        help_text=_('Last viewed'),
     )
 
     class Meta:
@@ -80,11 +81,16 @@ class Post(AbstractBaseModel):
     def get_absolute_url(self):
         return reverse('blog:post_detail', kwargs={"slug": self.slug})
 
-    def last_viewed(self):
-        self.last_accessed = timezone.now()
-        self.save()
+    def clean(self, *args, **kwargs):
 
-    def increment_views(self):
+        super(Post, self).clean()
+
+        if all([self.end_publication, self.start_publication]):
+            if self.end_publication < self.start_publication:
+                raise ValidationError(_('The publication start date must be before the publication end date.'))
+
+    def is_viewed(self):
+        self.last_viewed = timezone.now()
         self.views += 1
         self.save()
 

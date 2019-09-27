@@ -33,6 +33,5 @@ class PostDetailView(DetailView):
 
     def get_object(self, **kwargs):
         post = super(PostDetailView, self).get_object()
-        post.last_viewed()
-        post.increment_views()
+        post.is_viewed()
         return post
