@@ -14,12 +14,17 @@ from research.utils import validate_pdf_extension, rename_pdf
 
 
 class Paper(AbstractBaseModel):
+    ARTICLE = 'Article'
+    UNPUBLISHED = 'Unpublished'
+    TECHREPORT = 'Techreport'
+    INPROCEEDINGS = 'Inproceedings'
+    MISC = 'Misc'
     PAPERTYPE_CHOICES = [
-        ('Article', 'Published'),
-        ('Unpublished', 'Unpublished'),
-        ('Techreport', 'Working paper'),
-        ('Inproceedings', 'Conference article'),
-        ('Misc', 'Miscellaneous'),
+        (ARTICLE, 'Published'),
+        (UNPUBLISHED, 'Unpublished'),
+        (TECHREPORT, 'Working paper'),
+        (INPROCEEDINGS, 'Conference article'),
+        (MISC, 'Miscellaneous'),
     ]
     papertype = models.CharField(
         _('papertype'),
@@ -49,6 +54,10 @@ class Paper(AbstractBaseModel):
     )
     project_link = models.URLField(
         _('Link to project'),
+        blank=True,
+    )
+    binder_link = models.URLField(
+        _('Link to binder'),
         blank=True,
     )
     journal = models.CharField(

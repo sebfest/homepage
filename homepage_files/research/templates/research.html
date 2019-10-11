@@ -84,9 +84,16 @@
                                             {% endif %}
                                             {% if paper.project_link %}
                                                 <a href="{{ paper.project_link }}" target="_blank"
-                                                   class="btn btn-default"><i class="fa fa-folder"
+                                                   class="btn btn-default"><i class="fas fa-code-branch"
                                                                               aria-hidden="true"></i>
-                                                    Source</a>
+
+                                                    Github</a>
+                                            {% endif %}
+                                            {% if paper.binder_link %}
+                                                <a href="{{ paper.binder_link }}" target="_blank"
+                                                   class="btn btn-default"><i class="fas fa-laptop-code"
+                                                                              aria-hidden="true"></i>
+                                                    Binder</a>
                                             {% endif %}
 
                                         </div>

@@ -24,7 +24,7 @@ class PaperAdmin(admin.ModelAdmin):
          ),
         ('Optional',
          {
-             'fields': ['project_link', 'pdf', 'is_active'],
+             'fields': ['pdf', 'project_link', 'binder_link', 'is_active'],
              'classes': ['collapse']
          },
          ),
