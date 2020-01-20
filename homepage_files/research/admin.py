@@ -19,7 +19,7 @@ class PaperAdmin(admin.ModelAdmin):
     readonly_fields = ('created_date', 'modified_date', 'mime')
     fieldsets = [
         ('Main',
-         {'fields': ['papertype', 'title', 'authors', 'abstract', 'keywords', ]}
+         {'fields': ['status', 'title', 'authors', 'abstract', 'keywords', ]}
 
          ),
         ('Optional',
@@ -30,7 +30,7 @@ class PaperAdmin(admin.ModelAdmin):
          ),
         ('Journal Info',
          {
-             'fields': ['institution', 'journal', 'pages', 'volume', 'number', 'link', 'note'],
+             'fields': ['papertype', 'institution', 'journal', 'pages', 'volume', 'number', 'link', 'note'],
              'classes': ['collapse']}),
         ('Meta',
          {

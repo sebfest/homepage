@@ -19,6 +19,8 @@ class Paper(AbstractBaseModel):
     TECHREPORT = 'Techreport'
     INPROCEEDINGS = 'Inproceedings'
     MISC = 'Misc'
+    PUBLISHED = 'Published'
+    REVISE = 'Revise'
     PAPERTYPE_CHOICES = [
         (ARTICLE, 'Published'),
         (UNPUBLISHED, 'Unpublished'),
@@ -26,11 +28,22 @@ class Paper(AbstractBaseModel):
         (INPROCEEDINGS, 'Conference article'),
         (MISC, 'Miscellaneous'),
     ]
+    STATUS_CHOICES = [
+        (UNPUBLISHED, 'Unpublished'),
+        (PUBLISHED, 'Published'),
+        (REVISE, 'Revise & resubmit '),
+    ]
     papertype = models.CharField(
         _('papertype'),
         max_length=64,
         choices=PAPERTYPE_CHOICES,
-        default='Article',
+        default=UNPUBLISHED,
+    )
+    status = models.CharField(
+        _('status'),
+        max_length=64,
+        choices=STATUS_CHOICES,
+        default=UNPUBLISHED,
     )
     title = models.CharField(
         _('title'),
