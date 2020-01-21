@@ -69,6 +69,7 @@
                                             </tbody>
                                         </table>
                                     </div>
+                                    {% if paper.pdf or paper.project_link or paper.binder_link %}
                                     <hr>
                                     <div class="btn-group btn-group-sm" role="group" aria-label="button group">
                                         {% if paper.pdf %}
@@ -94,8 +95,8 @@
                                                                           aria-hidden="true"></i>
                                                 Binder</a>
                                         {% endif %}
-
                                     </div>
+                                    {% endif %}
                                 </div>
                             </div>
                         </div>
