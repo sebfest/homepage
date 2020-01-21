@@ -10,7 +10,8 @@ class PaperListView(ListView):
     model = Paper
     template_name = 'research.html'
     context_object_name = 'papers'
-    paginate_by = 5
+    paginate_by = 6
+    ordering = ['-activation_date']
 
 
 @require_http_methods(["GET"])

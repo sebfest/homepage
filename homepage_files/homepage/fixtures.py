@@ -9,40 +9,20 @@ django.setup()
 from blog.models import Post
 from blog.factories import PostFactory
 
+from research.models import Paper
+from research.factories import PaperFactory
+
 
 def populate():
-    PostFactory.create_batch(size=4)
+    PostFactory.create_batch(size=5)
+    PaperFactory.create_batch(size=5)
 
-    for p in Post.objects.all():
-        print(p)
+    joined_instances = Paper.objects.all() + Post.objects.all()
+    for instance in joined_instances:
+        print(instance)
     print("...population finished")
 
 
 if __name__ == '__main__':
     print("Starting blog population script...")
     populate()
-
-logging_config = dict(
-    version=1,
-    formatters={
-        'general': {'format': '%(asctime)s %(levelname)s %(message)s'}
-    },
-    handlers={
-        'console': {
-            'class': 'logging.StreamHandler',
-            'formatter': 'general',
-            'level': 'DEBUG'
-        },
-        'file': {
-            'class': 'logging.FileHandler',
-            'formatter': 'general',
-            'level': 'DEBUG',
-            'filename': 'logs/logfile.log',
-            'mode': 'a',
-        }
-    },
-    root={
-        'handlers': ['console', 'file'],
-        'level': 'INFO',
-    },
-)

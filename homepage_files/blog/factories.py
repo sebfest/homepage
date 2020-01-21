@@ -18,6 +18,7 @@ fake = Faker()
 class UserFactory(DjangoModelFactory):
     class Meta:
         model = settings.AUTH_USER_MODEL
+        django_get_or_create = ('username',)
 
     first_name = LazyAttribute(lambda o: fake.first_name())
     last_name = LazyAttribute(lambda o: fake.last_name())
