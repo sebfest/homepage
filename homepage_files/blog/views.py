@@ -42,5 +42,3 @@ class PostArchiveView(ArchiveIndexView):
     template_name = 'blog_archive.html'
     date_field = 'created_date'
     allow_empty = True
-
-

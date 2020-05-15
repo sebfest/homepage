@@ -13,20 +13,21 @@
     <div class="container">
         <div class="row">
             <div class="col-lg-8 col-md-10 mx-auto">
-                <p class="text-justify">Want to get in touch with me? Fill out the form below to send me a message and I will try to get back to you!</p>
-                <form id="contactForm" method="post" action="{% url 'contact:contact' %}">
-                {% csrf_token %}
-                {% bootstrap_form_errors form type="all" layout='inline' %}
-                {% bootstrap_form form form_group_class='form-group' show_help=False show_label=True set_required=True size='large' layout="horizontal" %}
-                <br>
-                <div class="row">
-                    <div class="form-group">
-                        <button class="btn btn-outline-secondary" type="submit" value="submit">
+                <div>
+                    <p class="text-justify">Want to get in touch with me? Fill out the form below to send me a message
+                    and I will try to get back to you!</p>
+                </div>
+                <div>
+                    <form id="contactForm" method="post" action="{% url 'contact:contact' %}">
+                        {% csrf_token %}
+                        {% bootstrap_form_errors form type="all" layout='inline' %}
+                        {% bootstrap_form form form_group_class='form-group' show_help=False show_label=True set_required=True size='large' layout="horizontal" %}
+                        <br>
+                        <button class="btn btn-outline-secondary rounded" type="submit" value="submit">
                             <i class="fa fa-paper-plane fa-1x aria-hidden="true"></i> Send
                         </button>
-                    </div>
+                    </form>
                 </div>
-                </form>
             </div>
         </div>
     </div>
