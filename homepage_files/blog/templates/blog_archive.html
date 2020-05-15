@@ -1,0 +1,34 @@
+{% extends "base.html" %}
+
+{% load static %}
+
+{% load bootstrap4 %}
+
+{% block title %}{{ block.super }} - Blog{% endblock %}
+
+{% block content %}
+
+    <div class="container">
+        <div class="row">
+            <div class="col-lg-8 col-md-10 mx-auto">
+                <h2 class="post-title">Archive</h2>
+                <br>
+                <div class="list-group list-group-flush">
+                {% for date in date_list %}
+                    <h3 class="post-title">{{ date.year }}</h3>
+                    <br>
+                    <ul class="list-group list-group-flush">
+                        {% for post in latest %}
+                            {% if date.year == post.created_date.year  %}
+                                <a class="list-group-item" href={% url 'blog:post_detail' post.slug %}>{{ post.title }}</a>
+                            {% endif %}
+                        {% endfor %}
+                    </ul>
+                    <br>
+                {% endfor %}
+                </div>
+            </div>
+        </div>
+    </div>
+
+{% endblock %}

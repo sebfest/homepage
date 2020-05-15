@@ -1,4 +1,4 @@
-from django.views.generic import TemplateView, ListView, DetailView
+from django.views.generic import ListView, DetailView, YearArchiveView, ArchiveIndexView
 
 from blog.models import Post
 
@@ -35,3 +35,12 @@ class PostDetailView(DetailView):
         post = super(PostDetailView, self).get_object()
         post.is_viewed()
         return post
+
+
+class PostArchiveView(ArchiveIndexView):
+    model = Post
+    template_name = 'blog_archive.html'
+    date_field = 'created_date'
+    allow_empty = True
+
+

@@ -5,9 +5,7 @@ from django.utils.translation import ugettext_lazy as _
 
 
 class AbstractBaseModel(models.Model):
-    """
-    Abstract base model
-    """
+    """Abstract base model."""
     slug = models.SlugField(
         _('slug'),
         max_length=128,

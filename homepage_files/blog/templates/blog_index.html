@@ -14,7 +14,7 @@
 
                 <!-- Post tag -->
                 {% if tag %}
-                    <h4 >Posts for category "{{ tag|title }}"</h4>
+                    <h4 class="post-title">Posts for category "{{ tag|title }}"</h4>
                     <br>
                 {% endif %}
 
@@ -29,8 +29,10 @@
                                 {{ post.subtitle|escape|linebreaks }}
                             </h3>
                         </a>
-                        <p class="post-meta">Posted by: <a
-                                href={{ post.author.homepage }}>{{ post.author|title }}</a>, {{ post.created_date|date:"d M" }}
+                        <p class="post-meta">
+                            Posted by:
+                            <a href={{ post.author.homepage }}>{{ post.author|title }}</a>,
+                            <a href={% url 'blog:post_archive' %}> {{ post.created_date|date:"d M" }}</a>
                             <br>
                             Taged under:
                             {% for tag in post.tags.all %}

@@ -1,13 +1,12 @@
 import datetime
 
-from django.test import TestCase, tag
+from django.test import TestCase
 from django.utils import timezone
 
 from blog.models import Post
 from blog.factories import PostFactory
 
 
-@tag('fast')
 class PostTestCase(TestCase):
 
     def test_post(self):
