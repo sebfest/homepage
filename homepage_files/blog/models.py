@@ -1,4 +1,12 @@
+import contextlib
+
+import nbformat
+import os
+
 from django.core.exceptions import ValidationError
+from django.core.files.base import ContentFile, File
+from django.core.files.storage import default_storage
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
 from django.utils import timezone
@@ -6,10 +14,43 @@ from django.utils.translation import ugettext_lazy as _
 
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from nbconvert.exporters import HTMLExporter
 from tagulous.models import TagField
+from traitlets.config import Config
 
 from homepage import settings
 from homepage.models import AbstractBaseModel
+
+
+def convert_notebook(nb_file: File):
+    """
+    Convert notebook file to .html and extract all images to the same folder as the source file.
+
+    :param nb_file: Notebook file
+    :return: str, the .html content
+    """
+    nb_file_dirname = os.path.dirname(nb_file.name)
+    nb_node = nbformat.read(nb_file, nbformat.NO_CONVERT)
+
+    c = Config()
+    c.HTMLExporter.preprocessors = [
+        'nbconvert.preprocessors.ExtractOutputPreprocessor',
+    ]
+
+    html_exporter = HTMLExporter(config=c)
+    html_exporter.template_file = 'basic'
+    html_body, html_resources = html_exporter.from_notebook_node(nb_node)
+
+    all_figures = html_resources.get('outputs', {})
+    for figure_name, figure in all_figures.items():
+        figure_path = os.path.join(nb_file_dirname, figure_name)
+        with contextlib.suppress(FileNotFoundError):
+            os.remove(figure_path)
+        default_storage.save(figure_path, ContentFile(figure))
+
+    #replace path in html content
+
+    return html_body
 
 
 class Post(AbstractBaseModel):
@@ -68,6 +109,12 @@ class Post(AbstractBaseModel):
         editable=False,
         help_text=_('Last viewed'),
     )
+    notebook_file = models.FileField(
+        blank=True,
+        upload_to='uploads/%Y/%m/%d/',
+        help_text=_('A notebook file'),
+        validators=[FileExtensionValidator(allowed_extensions=['ipynb'])],
+    )
 
     class Meta:
         verbose_name = _('Post')
@@ -82,12 +129,16 @@ class Post(AbstractBaseModel):
         return reverse('blog:post_detail', kwargs={"slug": self.slug})
 
     def clean(self, *args, **kwargs):
-
-        super(Post, self).clean()
+        super().clean(*args, **kwargs)
 
         if all([self.end_publication, self.start_publication]):
             if self.end_publication < self.start_publication:
                 raise ValidationError(_('The publication start date must be before the publication end date.'))
+
+    def save(self, *args, **kwargs):
+        if self.notebook_file:
+            self.body = convert_notebook(self.notebook_file.file)
+        super().save(*args, **kwargs)
 
     def is_viewed(self):
         self.last_viewed = timezone.now()
@@ -96,3 +147,7 @@ class Post(AbstractBaseModel):
 
     def formatted_markdown(self):
         return markdownify(self.body)
+
+    def img_dir(self):
+        if self.notebook_file:
+            return os.path.dirname(self.notebook_file.url)

@@ -1,6 +1,8 @@
 from django import forms
 from django.core.mail import send_mail
 from django.conf import settings
+from django.urls import reverse_lazy, reverse
+from django.utils.html import format_html
 
 
 class ContactForm(forms.Form):
@@ -22,6 +24,11 @@ class ContactForm(forms.Form):
         label='Your message:',
         help_text='Your message',
         widget=forms.Textarea(attrs={'placeholder': ''}),
+    )
+    consent = forms.BooleanField(
+        required=True,
+        label=format_html('I have read and agree to the <a href="/about/">privacy policy</a>.'),
+        help_text='Privacy policy',
     )
 
     def send_email(self):
