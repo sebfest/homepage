@@ -43,7 +43,7 @@ class PostAdmin(ModelAdmin):
             'classes': ['collapse'],
         }),
         ('Misc.', {
-            'fields': ['notebook_file', 'slug', 'enable_comments'],
+            'fields': ['slug', 'enable_comments'],
             'classes': ['collapse'],
         }),
         ('Info', {

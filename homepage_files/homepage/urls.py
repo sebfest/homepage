@@ -16,7 +16,6 @@ urlpatterns = [
     path('admin/', admin.site.urls),
     path('about/', flat_views.flatpage, {'url': '/about/'}, name='about'),
     path('disclaimer/', flat_views.flatpage, {'url': '/disclaimer/'}, name='disclaimer'),
-    path('privacy/', flat_views.flatpage, {'url': '/privacy/'}, name='privacy'),
     ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
 
 if settings.DEBUG:

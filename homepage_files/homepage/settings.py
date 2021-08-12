@@ -26,6 +26,7 @@ INSTALLED_APPS = [
     'django.contrib.flatpages',
 
     #Third party apps
+    'disqus',
     'markdownx',
     'bootstrap4',
     'tagulous',
