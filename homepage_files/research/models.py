@@ -1,16 +1,44 @@
 import mimetypes
 import os
+import string
 
+from django.core.exceptions import ValidationError
+from django.core.files import File
 from django.db import models
+from django.utils import timezone
 from django.utils.html import format_html_join
 from django.utils.translation import ugettext_lazy as _
 from tagulous.models import TagField
 
+from blog.models import AbstractBaseModel
 from homepage import settings
-from homepage.models import AbstractBaseModel
-
 from research.managers import PaperQuerySet
-from research.utils import validate_pdf_extension, rename_pdf
+
+
+def validate_pdf_extension(file: File) -> None:
+    """
+    Checks file for .pdf extension
+    :param file: A file object
+    :return: ValidationError if file not PDF
+    """
+    mime = mimetypes.guess_type(file.name)[0]
+    allowed_mime = ['application/pdf']
+    if mime not in allowed_mime:
+        raise ValidationError('%(mime)s Please provide a PDF file.', params={'mime': mime}, code='pdf_error')
+
+
+def rename_pdf(paper, filename: str) -> str:
+    """Renames file to AuthorYear.pdf or AuthorYearLetter.pdf if file already exists."""
+    author = paper.first_author
+    year = timezone.now().strftime('%Y')
+    file_ext = os.path.splitext(filename)[1]
+    file_path = f'papers/{author}/{author}{year}{file_ext}'
+    iteration = 0
+    while os.path.isfile(os.path.join(settings.MEDIA_ROOT, file_path)) and iteration < len(string.ascii_lowercase):
+        letter = string.ascii_lowercase[iteration]
+        file_path = f'papers/{author}/{author}{year}{letter}{file_ext}'
+        iteration += 1
+    return file_path
 
 
 class Paper(AbstractBaseModel):
@@ -31,7 +59,7 @@ class Paper(AbstractBaseModel):
     STATUS_CHOICES = [
         (UNPUBLISHED, 'Unpublished'),
         (PUBLISHED, 'Published'),
-        (REVISE, 'Revise & resubmit '),
+        (REVISE, 'Revise & resubmit'),
     ]
     papertype = models.CharField(
         _('papertype'),
@@ -104,6 +132,7 @@ class Paper(AbstractBaseModel):
     )
     pdf = models.FileField(
         verbose_name='PDF',
+        # upload_to=rename_pdf,
         validators=[validate_pdf_extension],
         blank=True
     )
@@ -121,38 +150,41 @@ class Paper(AbstractBaseModel):
         verbose_name_plural = "Papers"
 
     def __str__(self):
-        return self.title
+        return f'{self.title}'
 
     def clean(self, *args, **kwargs):
-
+        """Make sure mime type for paper is set."""
         super(Paper, self).clean()
 
         if self.pdf and not self.mime:
             self.mime = self.get_mime_type()
 
     def get_absolute_url(self):
+        """Get link to object."""
         return self.pdf.url if self.pdf else None
 
     def get_mime_type(self):
+        """Get mime type for .pdf file."""
         return mimetypes.guess_type(os.path.basename(self.pdf.name))[0]
 
     @property
     def first_author(self):
+        """Get first author."""
         return self.authors.all().order_by('last_name')[0].last_name
 
     @property
     def author_names(self):
+        """Get authors in alphabetical order."""
         all_authors = self.authors.all().order_by('last_name')
         return format_html_join(', ', '{}', ((a.get_full_name(),) for a in all_authors))
 
     @property
     def keyword_list(self):
+        """Get keyword list string."""
         return format_html_join(', ', '{}', ((keyword.name,) for keyword in self.keywords.all()))
 
     def get_bibtex(self):
-        """
-        :return: A Bibtex key string for an Article type.
-        """
+        """Generate a Bibtex key string for an Article type."""
         data = {
             'type': self.papertype,
             'title': self.title,

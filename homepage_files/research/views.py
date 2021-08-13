@@ -2,16 +2,18 @@ from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
 from django.views.generic import ListView
+from django.views.generic.base import ContextMixin
 
 from research.models import Paper
 
 
-class PaperListView(ListView):
+class PaperListView(ListView, ContextMixin):
     model = Paper
-    template_name = 'research.html'
+    template_name = 'research/research.html'
     context_object_name = 'papers'
     paginate_by = 6
     ordering = ['-activation_date']
+    extra_context = {'header': 'Research'}
 
 
 @require_http_methods(["GET"])

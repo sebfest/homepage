@@ -8,48 +8,80 @@ from research.models import Paper
 
 class PaperAdmin(admin.ModelAdmin):
     list_per_page = 10
-    list_display = ('title', 'created_date', 'is_active', 'pdf_link')
+    list_display = (
+        'title',
+        'created_date',
+        'is_active',
+        'pdf_link'
+    )
     list_filter = ('is_active',)
     date_hierarchy = 'created_date'
     ordering = ('-created_date',)
     search_fields = ('title', 'authors__full_name',)
-    actions_on_top = False
-    actions_on_bottom = True
-    prepopulated_fields = {'slug': ('title',)}
-    readonly_fields = ('created_date', 'modified_date', 'mime')
+    actions_on_top = True
+    actions_on_bottom = False
+
     fieldsets = [
         ('Main',
-         {'fields': ['status', 'title', 'authors', 'abstract', 'keywords', ]}
-
+         {
+             'fields':
+             [
+                 'status',
+                 'title',
+                 'authors',
+                 'abstract',
+                 'keywords',
+             ]
+         }
          ),
         ('Optional',
          {
-             'fields': ['pdf', 'project_link', 'binder_link', 'is_active'],
+             'fields':
+             [
+                 'pdf',
+                 'project_link',
+                 'binder_link',
+                 'is_active'
+             ],
              'classes': ['collapse']
-         },
+         }
          ),
         ('Journal Info',
          {
-             'fields': ['papertype', 'institution', 'journal', 'pages', 'volume', 'number', 'link', 'note'],
-             'classes': ['collapse']}),
+             'fields': [
+                 'papertype',
+                 'institution',
+                 'journal',
+                 'pages',
+                 'volume',
+                 'number',
+                 'link',
+                 'note'
+             ],
+             'classes': ['collapse']
+         }
+         ),
         ('Meta',
          {
-             'fields': ['created_date', 'modified_date', 'slug', ],
+             'fields': [
+                 'created_date',
+                 'modified_date',
+                 'slug',
+             ],
              'classes': ['collapse']
          }
          ),
     ]
+    readonly_fields = ('created_date', 'modified_date', 'mime', 'slug')
     formfield_overrides = {
         models.TextField: {'widget': Textarea(attrs={'rows': 15, 'cols': 100})},
         models.BooleanField: {'widget': Select(choices=((False, 'False'), (True, 'True')))},
     }
 
+    @admin.action(description='PDF-link')
     def pdf_link(self, item):
-        pdf_url = item.get_absolute_url()
-        if pdf_url:
+        if pdf_url := item.get_absolute_url():
             return format_html('<a href="{url}" target="_blank">PDF</a>', url=pdf_url)
-
-    pdf_link.short_description = 'PDF-link'
 
 
 admin.site.register(Paper, PaperAdmin)

@@ -1,42 +1,83 @@
 import datetime
-
 from django.test import TestCase
+from django.urls import reverse
 from django.utils import timezone
 
-from blog.models import Post
 from blog.factories import PostFactory
+from blog.models import Post
 
 
 class PostTestCase(TestCase):
+    post: Post = None
+
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test data."""
+        cls.post = PostFactory()
 
     def test_post(self):
-        test_post = PostFactory.create(
-            author__first_name='Sebastian',
-            author__last_name='Fest',
-            title='My test title',
-            subtitle='A subtitle for the test post',
-        )
-
-        self.assertTrue(isinstance(test_post, Post))
-        self.assertEqual('My test title', test_post.__str__())
+        """Test stering representation"""
+        self.assertTrue(isinstance(self.post, Post))
+        self.assertEqual(f'{self.post.title}', self.post.__str__())
 
     def test_last_viewed(self):
-        test_post = PostFactory(last_viewed=(timezone.now() - datetime.timedelta(days=1)))
-        last = test_post.last_viewed
-        test_post.is_viewed()
-        now = test_post.last_viewed
+        """Test updating of date when viewed."""
+        last = self.post.last_viewed
+        self.post.is_viewed()
+        now = self.post.last_viewed
         self.assertGreater(now, last)
 
     def test_increment(self):
-        test_post = PostFactory(views=10)
-        current_views = test_post.views
-        test_post.is_viewed()
-        incremented_views = test_post.views
-        self.assertEqual(10, current_views)
-        self.assertGreater(incremented_views, current_views)
+        """Test incrementing view."""
+        previous_views = self.post.views
+        self.post.is_viewed()
+        current_views = self.post.views
+        self.assertGreater(current_views, previous_views)
 
-    def test_set_date(self):
-        test_post = PostFactory(is_active=True, activation_date=None)
-        self.assertIsNotNone(test_post.activation_date)
-        test_post2 = PostFactory(is_active=False, activation_date=timezone.now())
-        self.assertIsNone(test_post2.activation_date)
+    def test_cretion_error(self):
+        """Test that start publication date after end publication date raises error."""
+        from django.core.exceptions import ValidationError
+        with self.assertRaises(ValidationError):
+            PostFactory(
+                end_publication=(timezone.now() - datetime.timedelta(days=1)),
+                start_publication=(timezone.now()),
+            )
+
+
+class PostViewTestCase(TestCase):
+    post: Post = None
+
+    @classmethod
+    def setUpTestData(cls):
+        """Set up test data."""
+        cls.post = PostFactory(
+            author__first_name='Peter',
+            author__last_name='Mustermann',
+            title='My test title',
+            subtitle='A subtitle for the test post',
+            views=10,
+            last_viewed=(timezone.now() - datetime.timedelta(days=1)),
+            is_active=True,
+            activation_date=None
+        )
+
+    def test_post_detail_content(self):
+        """Test post content presented."""
+        url = reverse(
+            'blog:post_detail',
+            kwargs={'slug': self.post.slug}
+        )
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'blog/blog_detail.html')
+        self.assertContains(response, self.post.body)
+
+    def test_post_tag_content(self):
+        """Test post content presented."""
+        url = reverse(
+            'blog:post_tag_list',
+            kwargs={'slug': self.post.slug}
+        )
+        response = self.client.get(url)
+        self.assertEqual(200, response.status_code)
+        self.assertTemplateUsed(response, 'blog/blog_index.html')

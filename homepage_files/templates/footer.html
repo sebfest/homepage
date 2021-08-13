@@ -1,7 +1,7 @@
-<footer xmlns="http://www.w3.org/1999/html">
-    <div class="container">
-        <div class="row">
-            <div class="col-lg-8 col-md-10 mx-auto">
+<footer class="border-top">
+    <div class="container px-4 px-lg-5">
+        <div class="row gx-4 gx-lg-5 justify-content-center">
+            <div class="col-md-10 col-lg-8 col-xl-7">
                 <ul class="list-inline text-center">
                     <li class="list-inline-item">
                         <a href="https://twitter.com/sebastian_fest">
@@ -12,7 +12,7 @@
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="{% url 'contact:contact' %}">
+                        <a href="mailto: sebastian.fest@gmail.com">
                             <span class="fa-stack fa-lg">
                                 <i class="fa fa-circle fa-stack-2x"></i>
                                 <i class="fa fa-envelope fa-stack-1x fa-inverse"></i>
@@ -28,7 +28,7 @@
                         </a>
                     </li>
                     <li class="list-inline-item">
-                        <a href="{% url 'blog:post_feed' %}">
+                        <a href="https://twitter.com/sebastian_fest">
                             <span class="fa-stack fa-lg">
                                 <i class="fas fa-circle fa-stack-2x"></i>
                                 <i class="fas fa-rss fa-stack-1x fa-inverse"></i>
@@ -36,8 +36,9 @@
                         </a>
                     </li>
                 </ul>
-                <p class="copyright text-muted">Copyright &copy; Sebastian Fest 2019 <br>
-                <a class="copyright text-muted" style="text-decoration: None" href={% url 'disclaimer' %}>Disclaimer</a>
+                <p class="copyright text-muted text-center fs-6">Copyright &copy; Sebastian Fest 2021 <br>
+                    <a class="copyright text-muted fs-6" style="text-decoration: underline"
+                       href={% url 'disclaimer' %}>Disclaimer</a>
                 </p>
             </div>
         </div>

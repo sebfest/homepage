@@ -1,15 +1,67 @@
 from django.core.exceptions import ValidationError
 from django.db import models
 from django.urls import reverse
+from django.utils.text import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
-
-from markdownx.models import MarkdownxField
-from markdownx.utils import markdownify
 from tagulous.models import TagField
 
 from homepage import settings
-from homepage.models import AbstractBaseModel
+
+
+class AbstractBaseModel(models.Model):
+    """Abstract base model for all models."""
+    slug = models.SlugField(
+        _('slug'),
+        max_length=128,
+        blank=True,
+        unique=True,
+        db_index=False,
+        help_text=_('Slug for URL.')
+    )
+    created_date = models.DateTimeField(
+        _('created at'),
+        auto_now=False,
+        auto_now_add=True,
+        editable=False,
+        help_text=_('Date of creation'),
+    )
+    modified_date = models.DateTimeField(
+        _('modified at'),
+        auto_now=True,
+        auto_now_add=False,
+        help_text=_('Date of last modification'),
+    )
+    is_active = models.BooleanField(
+        _('active'),
+        default=False,
+        help_text=_('Is active'),
+    )
+    activation_date = models.DateTimeField(
+        _('activated at'),
+        blank=True,
+        null=True,
+        help_text=_('Date of activation'),
+    )
+
+    def clean(self):
+
+        if self.is_active and self.activation_date is None:
+            self.activation_date = timezone.now()
+        elif not self.is_active and self.activation_date is not None:
+            self.activation_date = None
+
+        if not self.slug:
+            self.slug = slugify(self.__str__())
+
+    def save(self, *args, **kwargs):
+        self.clean()
+        super(AbstractBaseModel, self).save(*args, **kwargs)
+
+    class Meta:
+        abstract = True
+        ordering = ['-activation_date', '-created_date']
+        get_latest_by = 'activation_date'
 
 
 class Post(AbstractBaseModel):
@@ -31,14 +83,14 @@ class Post(AbstractBaseModel):
         max_length=256,
         help_text=_('The post subtitle'),
     )
-    body = MarkdownxField(
-        _('body'),
-        blank=True,
-        help_text=_('The post content'),
-    )
     tags = TagField(
         force_lowercase=True,
         max_count=5,
+        get_absolute_url=lambda tag: reverse('blog:post_tag_list', kwargs={'slug': tag.slug})
+    )
+    body = models.TextField(
+        blank=True,
+        null=True,
     )
     start_publication = models.DateTimeField(
         _('start publication'),
@@ -51,11 +103,6 @@ class Post(AbstractBaseModel):
         blank=True,
         null=True,
         help_text=_('End date of publication.'),
-    )
-    enable_comments = models.BooleanField(
-        _('Commenting on/off'),
-        default=True,
-        help_text=_('Show commenting section'),
     )
     views = models.IntegerField(
         default=0,
@@ -76,23 +123,21 @@ class Post(AbstractBaseModel):
         get_latest_by = 'activation_date'
 
     def __str__(self):
-        return self.title
+        return f'{self.title}'
 
     def get_absolute_url(self):
         return reverse('blog:post_detail', kwargs={"slug": self.slug})
 
-    def clean(self, *args, **kwargs):
+    def clean(self):
+        if all([self.end_publication, self.start_publication]) and self.end_publication < self.start_publication:
+            raise ValidationError(_('The publication start date must be before the publication end date.'))
 
-        super(Post, self).clean()
-
-        if all([self.end_publication, self.start_publication]):
-            if self.end_publication < self.start_publication:
-                raise ValidationError(_('The publication start date must be before the publication end date.'))
+        super().clean()
 
     def is_viewed(self):
         self.last_viewed = timezone.now()
         self.views += 1
         self.save()
 
-    def formatted_markdown(self):
-        return markdownify(self.body)
+    def save(self, *args, **kwargs):
+        super().save(*args, **kwargs)

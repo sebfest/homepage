@@ -1,19 +1,22 @@
-from django.views.generic import ListView, DetailView, YearArchiveView, ArchiveIndexView
+from django.views.generic import ListView, DetailView, ArchiveIndexView
+from django.views.generic.base import ContextMixin
 
 from blog.models import Post
 
 
-class PostListView(ListView):
+class PostListView(ListView, ContextMixin):
     model = Post
-    template_name = 'blog_index.html'
+    template_name = 'blog/blog_index.html'
     context_object_name = 'post_list'
     paginate_by = 3
+    extra_context = {'header': 'Blog'}
 
 
-class PostTagListView(ListView):
-    template_name = 'blog_index.html'
+class PostTagListView(ListView, ContextMixin):
+    template_name = 'blog/blog_index.html'
     context_object_name = 'post_list'
     paginate_by = 3
+    extra_context = {'header': 'Blog'}
 
     def get_queryset(self):
         slug = self.kwargs.get('slug')
@@ -26,10 +29,11 @@ class PostTagListView(ListView):
         return context
 
 
-class PostDetailView(DetailView):
+class PostDetailView(DetailView, ContextMixin):
     model = Post
-    template_name = 'blog_detail.html'
+    template_name = 'blog/blog_detail.html'
     context_object_name = 'post'
+    extra_context = {'header': 'Blog'}
 
     def get_object(self, **kwargs):
         post = super(PostDetailView, self).get_object()
@@ -37,8 +41,9 @@ class PostDetailView(DetailView):
         return post
 
 
-class PostArchiveView(ArchiveIndexView):
+class PostArchiveView(ArchiveIndexView, ContextMixin):
     model = Post
-    template_name = 'blog_archive.html'
+    template_name = 'blog/blog_archive.html'
     date_field = 'created_date'
     allow_empty = True
+    extra_context = {'header': 'Archive'}

@@ -2,9 +2,7 @@
 
 {% load static %}
 
-{% load bootstrap4 %}
-
-{% load disqus_tags %}
+{% load bootstrap5 %}
 
 {% block title %}Sebastian Fest - Blog{% endblock %}
 
@@ -13,22 +11,15 @@
 {% block sub_title %}{{ post.subtitle }}{% endblock %}
 
 {% block content %}
-    <article>
-        <div class="container">
-            <div class="row">
-                <div class="col-lg-8 col-md-10 mx-auto">
-
+    <article class="mb-4">
+        <div class="container px-4 px-lg-5">
+            <div class="row gx-4 gx-lg-5 justify-content-center">
+                <div class="col-md-10 col-lg-8 col-xl-7">
                     {% if post %}
-                        {{ post.formatted_markdown | safe }}
+                        {{ post.body | safe }}
                     {% else %}
                         <h3 class="post-title">Sorry, nothing here.</h3>
                     {% endif %}
-
-                    {% if post.enable_comments %}
-                        <h2 class="section-heading" style="padding-top: 20px">Comments</h2>
-                        {% disqus_show_comments %}
-                    {%  endif %}
-
                 </div>
             </div>
         </div>

@@ -3,11 +3,12 @@ import random
 
 from django.utils import timezone
 from factory import LazyAttribute, Faker, post_generation
-from factory.django import DjangoModelFactory
+from factory.django import DjangoModelFactory, FileField
 from factory.fuzzy import FuzzyDateTime
 
 from blog.factories import UserFactory
 from research.models import Paper
+from homepage.settings import MEDIA_ROOT
 
 
 class PaperFactory(DjangoModelFactory):
@@ -19,8 +20,9 @@ class PaperFactory(DjangoModelFactory):
     abstract = Faker('text', max_nb_chars=300)
     status = random.choice(Paper.STATUS_CHOICES)[0]
     keywords = Faker('words', nb=3, ext_word_list=None, unique=False)
-    project_link = Faker('url') if random.randint(0, 100) < 80 else ''
-    binder_link = Faker('url') if random.randint(0, 100) < 80 else ''
+    pdf = FileField(from_path=MEDIA_ROOT / 'test.pdf')
+    project_link = Faker('url')
+    binder_link = Faker('url')
 
     papertype = random.choice(Paper.PAPERTYPE_CHOICES)[0]
     institution = Faker('company')
@@ -28,7 +30,7 @@ class PaperFactory(DjangoModelFactory):
     pages = Faker('pyint')
     volume = Faker('pyint')
     number = Faker('pyint')
-    link = Faker('url') if random.randint(0, 100) < 50 else ''
+    link = Faker('url') if random.randint(0, 100) < 90 else ''
     note = Faker('text', max_nb_chars=50)
 
     created_date = FuzzyDateTime(timezone.now() - datetime.timedelta(days=random.randint(5, 356)))
