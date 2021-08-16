@@ -8,7 +8,7 @@ from factory import LazyAttribute, SubFactory, Faker
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyDateTime
 
-from homepage import settings
+from config import settings
 from blog.models import Post
 
 

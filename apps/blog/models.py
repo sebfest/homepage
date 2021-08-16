@@ -6,7 +6,7 @@ from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from tagulous.models import TagField
 
-from homepage import settings
+import config.settings.base as settings
 
 
 class AbstractBaseModel(models.Model):

@@ -1,6 +1,6 @@
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'landing_page.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', ' config.settings')
 
 import django
 

@@ -8,7 +8,7 @@ from factory.fuzzy import FuzzyDateTime
 
 from blog.factories import UserFactory
 from research.models import Paper
-from homepage.settings import MEDIA_ROOT
+from config.settings import MEDIA_ROOT
 
 
 class PaperFactory(DjangoModelFactory):

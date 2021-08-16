@@ -11,8 +11,9 @@ from django.utils.translation import ugettext_lazy as _
 from tagulous.models import TagField
 
 from blog.models import AbstractBaseModel
-from homepage import settings
 from research.managers import PaperQuerySet
+
+import config.settings.base as settings
 
 
 def validate_pdf_extension(file: File) -> None:
@@ -49,6 +50,7 @@ class Paper(AbstractBaseModel):
     MISC = 'Misc'
     PUBLISHED = 'Published'
     REVISE = 'Revise'
+
     PAPERTYPE_CHOICES = [
         (ARTICLE, 'Published'),
         (UNPUBLISHED, 'Unpublished'),
@@ -56,11 +58,13 @@ class Paper(AbstractBaseModel):
         (INPROCEEDINGS, 'Conference article'),
         (MISC, 'Miscellaneous'),
     ]
+
     STATUS_CHOICES = [
         (UNPUBLISHED, 'Unpublished'),
         (PUBLISHED, 'Published'),
         (REVISE, 'Revise & resubmit'),
     ]
+
     papertype = models.CharField(
         _('papertype'),
         max_length=64,

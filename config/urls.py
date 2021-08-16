@@ -3,7 +3,7 @@ from django.contrib import admin
 from django.contrib.flatpages import views
 from django.urls import path, include
 
-from homepage import settings
+import config.settings.base as settings
 
 urlpatterns = [
     path('', include('blog.urls')),
