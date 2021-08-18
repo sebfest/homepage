@@ -13,7 +13,8 @@
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
-                <div class="panel-group" id="accordion" role="tablist" aria-multiselectable="true">
+                <div class="panel-group" id="accordion" role="tablist"
+                     aria-multiselectable="true" style="margin-bottom: 50px;">
                     <div class="accordion accordion-flush" id="accordionPaper">
                         {% for paper in papers %}
                             <div class="accordion-item">
@@ -75,9 +76,10 @@
 
                                         <div class="btn-group btn-group-sm" role="group" aria-label="button group">
                                             {% if paper.pdf %}
-                                                <a href="{{ paper.pdf.url }}?view=False" class="btn btn-default">
+                                                <a href="{{ paper.pdf.url }}" download="{{ paper.pdf.name }}"
+                                                   class="btn btn-default">
                                                     <i class="fa fa-download" aria-hidden="true"></i> Download</a>
-                                                <a href="{{ paper.pdf.url }}?view=True" target="_blank"
+                                                <a href="{{ paper.pdf.url }}" target="_blank"
                                                    class="btn btn-default">
                                                     <i class="fa fa-eye" aria-hidden="true"></i> View</a>
                                                 <a href="{% url 'research:paper_bibtex' paper.pk %}"
