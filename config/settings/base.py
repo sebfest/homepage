@@ -3,6 +3,8 @@ import os
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 
+BASE_DIR = Path(__file__).resolve().parent.parent.parent
+
 
 def get_env_variable(var_name):
     """Get the environment variable or return exception."""
@@ -13,7 +15,7 @@ def get_env_variable(var_name):
         raise ImproperlyConfigured(error_msg)
 
 
-BASE_DIR = Path(__file__).resolve().parent.parent.parent
+SECRET_KEY = get_env_variable('DB_SECRET_KEY')
 
 INSTALLED_APPS = [
     'blog.apps.BlogConfig',
@@ -88,7 +90,6 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 AUTH_USER_MODEL = 'auth.User'
-SECRET_KEY = get_env_variable('DB_SECRET_KEY')
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
