@@ -2,6 +2,7 @@ import os
 
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
+from django.utils import timezone
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -31,6 +32,7 @@ INSTALLED_APPS = [
     # Third party apps
     'bootstrap5',
     'tagulous',
+    'markdownx',
 ]
 
 SITE_ID = 1
@@ -99,4 +101,5 @@ STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
 MEDIA_URL = '/media/'
 MEDIA_ROOT = BASE_DIR / 'media'
+MARKDOWNX_MEDIA_PATH = timezone.now().strftime('markdownx/%Y/%m/%d')
 DEFAULT_AUTO_FIELD = 'django.db.models.BigAutoField'

@@ -9,6 +9,7 @@ urlpatterns = [
     path('', include('blog.urls')),
     path('', include('research.urls')),
     path('admin/', admin.site.urls),
+    path('markdownx/', include('markdownx.urls')),
     path('about/', views.flatpage, {'url': '/about/'}, name='about'),
     path('disclaimer/', views.flatpage, {'url': '/disclaimer/'}, name='disclaimer'),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)

@@ -2,6 +2,8 @@ from django.contrib import admin, messages
 from django.db.models import QuerySet
 from django.http import HttpRequest
 from django.utils.html import format_html
+from markdownx.models import MarkdownxField
+from markdownx.widgets import AdminMarkdownxWidget
 
 from blog.models import Post
 
@@ -24,6 +26,9 @@ class PostAdmin(admin.ModelAdmin):
     actions_on_bottom = False
     actions = ('make_published', 'make_unpublished',)
 
+    formfield_overrides = {
+        MarkdownxField: {'widget': AdminMarkdownxWidget},
+    }
     prepopulated_fields = {"slug": ("title",)}
     readonly_fields = (
         'created_date',

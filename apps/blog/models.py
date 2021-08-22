@@ -4,6 +4,8 @@ from django.urls import reverse
 from django.utils.text import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
+from markdownx.models import MarkdownxField
+from markdownx.utils import markdownify
 from tagulous.models import TagField
 
 import config.settings.base as settings
@@ -88,9 +90,10 @@ class Post(AbstractBaseModel):
         max_count=5,
         get_absolute_url=lambda tag: reverse('blog:post_tag_list', kwargs={'slug': tag.slug})
     )
-    body = models.TextField(
+    body = MarkdownxField(
+        _('body'),
         blank=True,
-        null=True,
+        help_text=_('The post content'),
     )
     start_publication = models.DateTimeField(
         _('start publication'),
@@ -141,3 +144,7 @@ class Post(AbstractBaseModel):
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)
+
+    @property
+    def formatted_markdown(self):
+        return markdownify(self.body)
