@@ -1,3 +1,4 @@
+from django.db.models import Q
 from django.http import HttpResponse
 from django.shortcuts import get_object_or_404
 from django.views.decorators.http import require_http_methods
@@ -10,10 +11,12 @@ from research.models import Paper
 class PaperListView(ListView, ContextMixin):
     model = Paper
     template_name = 'research/research.html'
-    context_object_name = 'papers'
-    paginate_by = 6
     ordering = ['-activation_date']
-    extra_context = {'header': 'Research'}
+    extra_context = {
+        'header': 'Research',
+        'published_papers': Paper.objects.filter(status=Paper.PUBLISHED),
+        'unpublished_papers': Paper.objects.filter(Q(status=Paper.UNPUBLISHED)|Q(status=Paper.REVISE))
+    }
 
 
 @require_http_methods(["GET"])

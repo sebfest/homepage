@@ -1,69 +1,23 @@
+import contextlib
+import os
+
+import nbformat
 from django.core.exceptions import ValidationError
+from django.core.files import File
+from django.core.files.base import ContentFile
+from django.core.files.storage import default_storage
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.urls import reverse
-from django.utils.text import slugify
 from django.utils import timezone
 from django.utils.translation import ugettext_lazy as _
 from markdownx.models import MarkdownxField
 from markdownx.utils import markdownify
+from nbconvert.exporters import HTMLExporter
 from tagulous.models import TagField
 
 import config.settings.base as settings
-
-
-class AbstractBaseModel(models.Model):
-    """Abstract base model for all models."""
-    slug = models.SlugField(
-        _('slug'),
-        max_length=128,
-        blank=True,
-        unique=True,
-        db_index=False,
-        help_text=_('Slug for URL.')
-    )
-    created_date = models.DateTimeField(
-        _('created at'),
-        auto_now=False,
-        auto_now_add=True,
-        editable=False,
-        help_text=_('Date of creation'),
-    )
-    modified_date = models.DateTimeField(
-        _('modified at'),
-        auto_now=True,
-        auto_now_add=False,
-        help_text=_('Date of last modification'),
-    )
-    is_active = models.BooleanField(
-        _('active'),
-        default=False,
-        help_text=_('Is active'),
-    )
-    activation_date = models.DateTimeField(
-        _('activated at'),
-        blank=True,
-        null=True,
-        help_text=_('Date of activation'),
-    )
-
-    def clean(self):
-
-        if self.is_active and self.activation_date is None:
-            self.activation_date = timezone.now()
-        elif not self.is_active and self.activation_date is not None:
-            self.activation_date = None
-
-        if not self.slug:
-            self.slug = slugify(self.__str__())
-
-    def save(self, *args, **kwargs):
-        self.clean()
-        super(AbstractBaseModel, self).save(*args, **kwargs)
-
-    class Meta:
-        abstract = True
-        ordering = ['-activation_date', '-created_date']
-        get_latest_by = 'activation_date'
+from config.basemodels import AbstractBaseModel
 
 
 class Post(AbstractBaseModel):
@@ -94,6 +48,12 @@ class Post(AbstractBaseModel):
         _('body'),
         blank=True,
         help_text=_('The post content'),
+    )
+    notebook = models.FileField(
+        help_text=_('A notebook file'),
+        blank=True,
+        upload_to='uploads/%Y/%m/%d/',
+        validators=[FileExtensionValidator(allowed_extensions=['ipynb'])],
     )
     start_publication = models.DateTimeField(
         _('start publication'),
@@ -148,3 +108,26 @@ class Post(AbstractBaseModel):
     @property
     def formatted_markdown(self):
         return markdownify(self.body)
+
+
+def convert_notebook(nb_file: File):
+    """
+    Convert notebook file to .html and extract all images to the same folder as the source file.
+
+    :param nb_file: Notebook file
+    :return: str, the .html content
+    """
+    nb_file_dirname = os.path.dirname(nb_file.name)
+    nb_node = nbformat.read(nb_file, nbformat.NO_CONVERT)
+
+    html_exporter = HTMLExporter()
+    html_body, html_resources = html_exporter.from_notebook_node(nb_node)
+
+    all_figures = html_resources.get('outputs', {})
+    for figure_name, figure in all_figures.items():
+        figure_path = os.path.join(nb_file_dirname, figure_name)
+        with contextlib.suppress(FileNotFoundError):
+            os.remove(figure_path)
+        default_storage.save(figure_path, ContentFile(figure))
+
+    return html_body

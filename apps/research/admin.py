@@ -27,6 +27,7 @@ class PaperAdmin(admin.ModelAdmin):
              'fields':
              [
                  'status',
+                 'version',
                  'title',
                  'authors',
                  'abstract',

@@ -54,7 +54,7 @@ class Migration(migrations.Migration):
                 ('number', models.CharField(blank=True, max_length=16, verbose_name='number')),
                 ('link', models.URLField(blank=True, verbose_name='Link to journal')),
                 ('note', models.CharField(blank=True, max_length=256, verbose_name='note')),
-                ('pdf', models.FileField(blank=True, upload_to='', validators=[research.models.validate_pdf_extension], verbose_name='PDF')),
+                ('pdf', models.FileField(blank=True, upload_to='', verbose_name='PDF')),
                 ('mime', models.CharField(blank=True, editable=False, max_length=64, verbose_name='mime')),
                 ('authors', models.ManyToManyField(related_name='papers', to=settings.AUTH_USER_MODEL)),
                 ('keywords', tagulous.models.fields.TagField(_set_tag_meta=True, force_lowercase=True, help_text='Enter a comma-separated tag string', max_count=5, to='Research.Tagulous_Paper_keywords')),

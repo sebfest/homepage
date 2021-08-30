@@ -3,19 +3,17 @@ import random
 
 from django.utils import timezone
 from django.utils.text import slugify
-
 from factory import LazyAttribute, SubFactory, Faker
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyDateTime
 
-from config import settings
 from blog.models import Post
+from config.settings import local
 
 
 class UserFactory(DjangoModelFactory):
-
     class Meta:
-        model = settings.AUTH_USER_MODEL
+        model = local.AUTH_USER_MODEL
         django_get_or_create = ('username',)
 
     first_name = Faker('first_name')
@@ -33,7 +31,6 @@ class UserFactory(DjangoModelFactory):
 
 
 class PostFactory(DjangoModelFactory):
-
     class Meta:
         model = Post
         django_get_or_create = ('title',)
@@ -53,6 +50,3 @@ class PostFactory(DjangoModelFactory):
     is_active = Faker('boolean', chance_of_getting_true=80)
     views = Faker('random_int', min=0, max=300, step=1)
     last_viewed = LazyAttribute(lambda obj: obj.created_date)
-
-
-

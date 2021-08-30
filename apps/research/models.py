@@ -2,30 +2,16 @@ import mimetypes
 import os
 import string
 
-from django.core.exceptions import ValidationError
-from django.core.files import File
+from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.html import format_html_join
 from django.utils.translation import ugettext_lazy as _
 from tagulous.models import TagField
 
-from blog.models import AbstractBaseModel
-from research.managers import PaperQuerySet
-
 import config.settings.base as settings
-
-
-def validate_pdf_extension(file: File) -> None:
-    """
-    Checks file for .pdf extension
-    :param file: A file object
-    :return: ValidationError if file not PDF
-    """
-    mime = mimetypes.guess_type(file.name)[0]
-    allowed_mime = ['application/pdf']
-    if mime not in allowed_mime:
-        raise ValidationError('%(mime)s Please provide a PDF file.', params={'mime': mime}, code='pdf_error')
+from config.basemodels import AbstractBaseModel
+from research.managers import PaperQuerySet
 
 
 def rename_pdf(paper, filename: str) -> str:
@@ -88,6 +74,12 @@ class Paper(AbstractBaseModel):
     abstract = models.TextField(
         _('abstract'),
     )
+    version = models.DateTimeField(
+        _('version date'),
+        help_text=_('Date of version'),
+        blank=True,
+        null=True,
+    )
     institution = models.CharField(
         _('institution'),
         max_length=256,
@@ -137,7 +129,7 @@ class Paper(AbstractBaseModel):
     pdf = models.FileField(
         verbose_name='PDF',
         # upload_to=rename_pdf,
-        validators=[validate_pdf_extension],
+        validators=[FileExtensionValidator(allowed_extensions=['pdf'])],
         blank=True
     )
     mime = models.CharField(
@@ -162,6 +154,14 @@ class Paper(AbstractBaseModel):
 
         if self.pdf and not self.mime:
             self.mime = self.get_mime_type()
+
+    def delete(self, *args, **kwargs):
+        """Remove .pdf file from disk."""
+        storage = self.pdf.storage
+        if storage.exists(self.pdf.name):
+            storage.delete(self.pdf.name)
+
+        super().delete(*args, **kwargs)
 
     def get_absolute_url(self):
         """Get link to object."""

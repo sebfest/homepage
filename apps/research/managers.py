@@ -5,4 +5,8 @@ from django.db.models import Q
 class PaperQuerySet(models.QuerySet):
     def published(self):
         """Get all published items."""
-        return self.filter(Q(publish=True),)
+        return self.filter(Q(publish=True))
+
+    def unpublished(self):
+        """Get all published items."""
+        return self.filter(Q(publish=False))

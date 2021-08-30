@@ -1,11 +1,11 @@
 import os
 
-os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'settings.settings')
+os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.local')
+os.environ.setdefault('DB_SECRET_KEY', 'foobar')
 
 import django
 
 django.setup()
-
 
 from research.factories import PaperFactory
 from research.models import Paper
@@ -35,8 +35,8 @@ def main():
     }
     menu = """
     
-    1 = Create dummy posts.
-    2 = Delete all posts.
+    1 = Create dummy papers.
+    2 = Delete all papers.
     3 = Quit program.
     
     """

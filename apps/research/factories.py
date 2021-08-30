@@ -1,14 +1,24 @@
 import datetime
+import io
 import random
 
 from django.utils import timezone
 from factory import LazyAttribute, Faker, post_generation
 from factory.django import DjangoModelFactory, FileField
 from factory.fuzzy import FuzzyDateTime
+from reportlab.pdfgen import canvas
 
 from blog.factories import UserFactory
 from research.models import Paper
-from config.settings import MEDIA_ROOT
+
+
+def make_pdf():
+    buffer = io.BytesIO()
+    pdf = canvas.Canvas(buffer)
+    pdf.drawString(100, 100, "Hello world.")
+    pdf.showPage()
+    pdf.save()
+    return buffer
 
 
 class PaperFactory(DjangoModelFactory):
@@ -19,8 +29,12 @@ class PaperFactory(DjangoModelFactory):
     title = Faker('sentence', nb_words=4, variable_nb_words=True)
     abstract = Faker('text', max_nb_chars=300)
     status = random.choice(Paper.STATUS_CHOICES)[0]
+    version = FuzzyDateTime(timezone.now())
     keywords = Faker('words', nb=3, ext_word_list=None, unique=False)
-    pdf = FileField(from_path=MEDIA_ROOT / 'test.pdf')
+    pdf = FileField(
+        from_func=make_pdf,
+        filename='foobar.pdf'
+    )
     project_link = Faker('url')
     binder_link = Faker('url')
 
@@ -51,6 +65,3 @@ class PaperFactory(DjangoModelFactory):
             else:
                 author = UserFactory.create()
             self.authors.add(author)
-
-
-

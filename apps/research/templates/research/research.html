@@ -13,10 +13,12 @@
     <div class="container px-4 px-lg-5">
         <div class="row gx-4 gx-lg-5 justify-content-center">
             <div class="col-md-10 col-lg-8 col-xl-7">
+                <!-- Published -->
+                <div class="row"><h5 class="text-center">Published</h5></div>
                 <div class="panel-group" id="accordion" role="tablist"
                      aria-multiselectable="true" style="margin-bottom: 50px;">
+                    {% for paper in published_papers %}
                     <div class="accordion accordion-flush" id="accordionPaper">
-                        {% for paper in papers %}
                             <div class="accordion-item">
                             <h2 class="accordion-header" id="heading_{{ paper.id }}">
                                 <button class="accordion-button fs-5"
@@ -47,7 +49,7 @@
                                             </tr>
                                             <tr>
                                                 <td>Version:</td>
-                                                <td>{{ paper.modified_date|date:"F Y" }}</td>
+                                                <td>{{ paper.version|date:"F Y" }}</td>
                                             </tr>
                                             <tr>
                                                 <td>
@@ -73,7 +75,6 @@
                                         </table>
                                     </div>
                                     {% if paper.pdf or paper.project_link or paper.binder_link %}
-
                                         <div class="btn-group btn-group-sm" role="group" aria-label="button group">
                                             {% if paper.pdf %}
                                                 <a href="{{ paper.pdf.url }}" download="{{ paper.pdf.name }}"
@@ -100,13 +101,103 @@
                                     {% endif %}
                                 </div>
                             </div>
-                        {% empty %}
-                            <div class="post-preview text-center">
-                                <h3 class="post-title">No papers here</h3>
-                            </div>
-                        {% endfor %}
                         </div>
                     </div>
+                    {% endfor %}
+                </div>
+                <!-- Unpublished -->
+                <div class="row"><h5 class="text-center">Unpublished</h5></div>
+                <div class="panel-group" id="accordion" role="tablist"
+                     aria-multiselectable="true" style="margin-bottom: 50px;">
+                    {% for paper in unpublished_papers %}
+                    <div class="accordion accordion-flush" id="accordionPaper">
+                            <div class="accordion-item">
+                            <h2 class="accordion-header" id="heading_{{ paper.id }}">
+                                <button class="accordion-button fs-5"
+                                        type="button"
+                                        data-bs-toggle="collapse"
+                                        data-bs-target="#collapse_{{ paper.id }}"
+                                        aria-expanded="true"
+                                        aria-controls="collapseOne">
+                                    {{ paper.title|linebreaksbr }}
+                                </button>
+                            </h2>
+                            <div id="collapse_{{ paper.id }}"
+                                 class="accordion-collapse collapse"
+                                 aria-labelledby="heading_{{ paper.id }}"
+                                 data-bs-parent="#accordionPaper">
+                                <div class="accordion-body">
+                                    <div class="table-responsive">
+                                        <table class="table table-hover text-justify">
+                                            <tbody>
+                                            <tr>
+                                                <td>
+                                                    {% if paper.authors.all|length > 1 %}
+                                                        Authors:
+                                                    {% else %}
+                                                        Author:
+                                                    {% endif %}</td>
+                                                <td>{{ paper.author_names }}</td>
+                                            </tr>
+                                            {% if paper.version %}
+                                            <tr>
+                                                <td>Version:</td>
+                                                <td>{{ paper.version|date:"F Y" }}</td>
+                                            </tr>
+                                            {% endif %}
+                                            <tr>
+                                                <td>
+                                                    {% if paper.keywords.all|length > 1 %}
+                                                        Keywords:
+                                                    {% else %}
+                                                        Keyword:
+                                                    {% endif %}
+                                                </td>
+                                                <td>
+                                                    {{ paper.keyword_list|title }}
+                                                </td>
+                                            </tr>
+                                            <tr>
+                                                <td>Abstract:</td>
+                                                <td>{{ paper.abstract }}</td>
+                                            </tr>
+                                            <tr>
+                                                <td>Status:</td>
+                                                <td>{{ paper.get_status_display }}</td>
+                                            </tr>
+                                            </tbody>
+                                        </table>
+                                    </div>
+                                    {% if paper.pdf or paper.project_link or paper.binder_link %}
+                                        <div class="btn-group btn-group-sm" role="group" aria-label="button group">
+                                            {% if paper.pdf %}
+                                                <a href="{{ paper.pdf.url }}" download="{{ paper.pdf.name }}"
+                                                   class="btn btn-default">
+                                                    <i class="fa fa-download" aria-hidden="true"></i> Download</a>
+                                                <a href="{{ paper.pdf.url }}" target="_blank"
+                                                   class="btn btn-default">
+                                                    <i class="fa fa-eye" aria-hidden="true"></i> View</a>
+                                                <a href="{% url 'research:paper_bibtex' paper.pk %}"
+                                                   class="btn btn-default">
+                                                    <i class="fa fa-book" aria-hidden="true"></i> Bibtex</a>
+                                            {% endif %}
+                                            {% if paper.project_link %}
+                                                <a href="{{ paper.project_link }}" target="_blank"
+                                                   class="btn btn-default">
+                                                    <i class="fas fa-code-branch" aria-hidden="true"></i> Github</a>
+                                            {% endif %}
+                                            {% if paper.binder_link %}
+                                                <a href="{{ paper.binder_link }}" target="_blank"
+                                                   class="btn btn-default">
+                                                    <i class="fas fa-laptop-code" aria-hidden="true"></i> Binder</a>
+                                            {% endif %}
+                                        </div>
+                                    {% endif %}
+                                </div>
+                            </div>
+                        </div>
+                    </div>
+                    {% endfor %}
                 </div>
                 <!-- Pager -->
                 {% if is_paginated %}
