@@ -139,8 +139,6 @@ class Paper(AbstractBaseModel):
         editable=False
     )
 
-    objects = PaperQuerySet.as_manager()
-
     class Meta:
         verbose_name = "Paper"
         verbose_name_plural = "Papers"
