@@ -10,6 +10,18 @@ load_dotenv()
 
 def main():
     """Run administrative tasks."""
+
+    print(os.getcwd())
+
+    paths = [
+        '/home/sebfest/homepage',
+        '/home/sebfest/homepage/apps',
+    ]
+
+    for index, path in enumerate(paths):
+        if path not in sys.path:
+            sys.path.insert(index, path)
+
     os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
     try:
         from django.core.management import execute_from_command_line
