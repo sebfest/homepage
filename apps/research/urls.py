@@ -5,12 +5,12 @@ from research import views
 app_name = 'research'
 urlpatterns = [
     path(
-        'research/',
+        'papers/',
         views.PaperListView.as_view(),
         name='paper_list'
     ),
     path(
-        'research/<int:pk>/bibtex/',
+        'papers/<int:pk>/bibtex/',
         views.bibtex_view,
         name='paper_bibtex'
     ),
