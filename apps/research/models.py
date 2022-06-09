@@ -36,6 +36,7 @@ class Paper(AbstractBaseModel):
     MISC = 'Misc'
     PUBLISHED = 'Published'
     REVISE = 'Revise'
+    FORTH = 'Forthcoming'
 
     PAPERTYPE_CHOICES = [
         (ARTICLE, 'Published'),
@@ -49,6 +50,7 @@ class Paper(AbstractBaseModel):
         (UNPUBLISHED, 'Unpublished'),
         (PUBLISHED, 'Published'),
         (REVISE, 'Revise & resubmit'),
+        (FORTH, 'Forthcoming'),
     ]
 
     papertype = models.CharField(
