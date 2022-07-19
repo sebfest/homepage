@@ -14,7 +14,7 @@ class PaperListView(ListView, ContextMixin):
     ordering = ['-activation_date']
     extra_context = {
         'header': 'Research',
-        'published_papers': Paper.objects.filter(status=Paper.PUBLISHED),
+        'published_papers': Paper.objects.filter(Q(status=Paper.PUBLISHED) | Q(status=Paper.FORTH)),
         'unpublished_papers': Paper.objects.filter(Q(status=Paper.UNPUBLISHED) | Q(status=Paper.REVISE))
     }
 
