@@ -7,22 +7,24 @@ from dotenv import load_dotenv
 
 load_dotenv()
 
-
 def main():
     """Run administrative tasks."""
 
-    print(os.getcwd())
-
+    pwd = os.getcwd()
     paths = [
-        '/home/sebfest/homepage',
-        '/home/sebfest/homepage/apps',
+        pwd,
+        os.path.join(pwd, 'apps')
     ]
 
     for index, path in enumerate(paths):
         if path not in sys.path:
             sys.path.insert(index, path)
 
-    os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+    if os.environ['DEBUG'] == '1':
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.local')
+    else:
+        os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')
+
     try:
         from django.core.management import execute_from_command_line
     except ImportError as exc:

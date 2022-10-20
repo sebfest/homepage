@@ -3,6 +3,9 @@ import os
 from pathlib import Path
 from django.core.exceptions import ImproperlyConfigured
 from django.utils import timezone
+from dotenv import load_dotenv
+
+load_dotenv()
 
 BASE_DIR = Path(__file__).resolve().parent.parent.parent
 
@@ -35,7 +38,7 @@ INSTALLED_APPS = [
     'markdownx',
 ]
 
-SITE_ID = 1
+SITE_ID = 2
 
 MIDDLEWARE = [
     'django.middleware.security.SecurityMiddleware',
@@ -91,10 +94,10 @@ AUTH_PASSWORD_VALIDATORS = [
 ]
 
 SERIALIZATION_MODULES = {
-    'xml':    'tagulous.serializers.xml_serializer',
-    'json':   'tagulous.serializers.json',
+    'xml': 'tagulous.serializers.xml_serializer',
+    'json': 'tagulous.serializers.json',
     'python': 'tagulous.serializers.python',
-    'yaml':   'tagulous.serializers.pyyaml',
+    'yaml': 'tagulous.serializers.pyyaml',
 }
 
 AUTH_USER_MODEL = 'auth.User'

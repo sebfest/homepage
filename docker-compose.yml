@@ -1,0 +1,13 @@
+version: "3.8"
+services:
+  app:
+    build: .
+    volumes:
+      - type: bind
+        source: .
+        target: /app
+    ports:
+      - 8000:8000
+    env_file: .env
+    container_name: app
+    command: ./compose/local/start.sh

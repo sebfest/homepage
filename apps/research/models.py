@@ -6,7 +6,7 @@ from django.core.validators import FileExtensionValidator
 from django.db import models
 from django.utils import timezone
 from django.utils.html import format_html_join
-from django.utils.translation import ugettext_lazy as _
+from django.utils.translation import gettext_lazy as _
 from tagulous.models import TagField
 
 import config.settings.base as settings
