@@ -22,6 +22,7 @@ def get_env_variable(var_name):
 SECRET_KEY = get_env_variable('DB_SECRET_KEY')
 
 INSTALLED_APPS = [
+    'landing.apps.LandingConfig',
     'blog.apps.BlogConfig',
     'research.apps.ResearchConfig',
     'django.contrib.admin',
@@ -31,7 +32,6 @@ INSTALLED_APPS = [
     'django.contrib.messages',
     'django.contrib.staticfiles',
     'django.contrib.sites',
-    'django.contrib.flatpages',
     # Third party apps
     'bootstrap5',
     'tagulous',
@@ -48,7 +48,6 @@ MIDDLEWARE = [
     'django.contrib.auth.middleware.AuthenticationMiddleware',
     'django.contrib.messages.middleware.MessageMiddleware',
     'django.middleware.clickjacking.XFrameOptionsMiddleware',
-    'django.contrib.flatpages.middleware.FlatpageFallbackMiddleware',
 ]
 
 ROOT_URLCONF = 'config.urls'

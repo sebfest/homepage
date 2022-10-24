@@ -1,41 +1,32 @@
 from django.conf.urls.static import static
 from django.contrib import admin
-from django.contrib.flatpages import views
 from django.urls import path, include
 
 import config.settings.base as settings
+import os
 
 urlpatterns = [
     path(
-        '',
-        views.flatpage,
-        {'url': '/welcome/'},
-        name='welcome'
+      '',
+      include('landing.urls')
     ),
     path(
-        'blog/',
-        include('blog.urls')
+      'blog/',
+      include('blog.urls')
     ),
     path(
-        'research/',
-        include('research.urls')
+      'research/',
+      include('research.urls')
     ),
     path(
-        'admin/',
-        admin.site.urls
+      'admin/',
+      admin.site.urls
     ),
     path(
-        'markdownx/',
-        include('markdownx.urls')
-    ),
-    path(
-        'disclaimer/',
-        views.flatpage,
-        {'url': '/disclaimer/'},
-        name='disclaimer'
-    ),
-    path(
-        '__debug__/',
-        include('debug_toolbar.urls')
+      'markdownx/',
+      include('markdownx.urls')
     ),
 ] + static(settings.MEDIA_URL, document_root=settings.MEDIA_ROOT)
+
+if os.environ['DEBUG'] == '1':
+    urlpatterns.append(path('__debug__/', include('debug_toolbar.urls')))

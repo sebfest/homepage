@@ -7,7 +7,7 @@ services:
         source: .
         target: /app
     ports:
-      - 8000:8000
+      - "8000:8000"
     env_file: .env
     container_name: app
     command: ./compose/local/start.sh
