@@ -29,6 +29,11 @@ class PaperTestCase(TestCase):
         """Test correct first author"""
         self.assertTrue(self.paper.first_author == 'Alfred')
 
+    def test_first_author_without_authors(self):
+        """Test fallback for papers without authors."""
+        paper = Paper.objects.create(title='No author paper', abstract='test')
+        self.assertEqual(paper.first_author, 'unknown')
+
     def test_author_names(self):
         """Test sequence of authors"""
         self.assertTrue(self.paper.author_names == 'Anton Alfred, Willy Wucher')
@@ -38,8 +43,9 @@ class ResearchPageTest(TestCase):
 
     @classmethod
     def setUpTestData(cls):
-        Paper.objects.create(title='What a beautiful day')
-        Paper.objects.create(title='My cat eats dog food')
+        Paper.objects.create(title='What a beautiful day', is_active=True)
+        Paper.objects.create(title='My cat eats dog food', is_active=True)
+        Paper.objects.create(title='Draft paper', is_active=False)
 
     def test_view(self):
         url = reverse('research:paper_list')
@@ -49,4 +55,4 @@ class ResearchPageTest(TestCase):
         self.assertTrue(len(response.context['papers']) == 2)
         self.assertIn('What a beautiful day', response.content.decode())
         self.assertIn('My cat eats dog food', response.content.decode())
-
+        self.assertNotIn('Draft paper', response.content.decode())

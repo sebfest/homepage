@@ -8,6 +8,7 @@ from django.core.files.base import ContentFile
 from django.core.files.storage import default_storage
 from django.core.validators import FileExtensionValidator
 from django.db import models
+from django.db.models import F, Q
 from django.urls import reverse
 from django.utils import timezone
 from django.utils.translation import gettext_lazy as _
@@ -18,6 +19,16 @@ from tagulous.models import TagField
 
 import config.settings.base as settings
 from config.basemodels import AbstractBaseModel
+
+
+class PostQuerySet(models.QuerySet):
+    def public(self):
+        now = timezone.now()
+        return self.filter(
+            Q(start_publication__isnull=True) | Q(start_publication__lte=now),
+            Q(end_publication__isnull=True) | Q(end_publication__gte=now),
+            is_active=True,
+        )
 
 
 class Post(AbstractBaseModel):
@@ -78,6 +89,7 @@ class Post(AbstractBaseModel):
         editable=False,
         help_text=_('Last viewed'),
     )
+    objects = PostQuerySet.as_manager()
 
     class Meta:
         verbose_name = _('Post')
@@ -98,9 +110,13 @@ class Post(AbstractBaseModel):
         super().clean()
 
     def is_viewed(self):
-        self.last_viewed = timezone.now()
+        viewed_at = timezone.now()
+        self.__class__.objects.filter(pk=self.pk).update(
+            last_viewed=viewed_at,
+            views=F('views') + 1,
+        )
+        self.last_viewed = viewed_at
         self.views += 1
-        self.save()
 
     def save(self, *args, **kwargs):
         super().save(*args, **kwargs)

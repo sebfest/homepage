@@ -6,11 +6,16 @@ Dockerfile
 README.md
 docker-compose.yml
 venv/
+.venv/
 env/
 __pycache__
 *.pyc
+db.sqlite3
+media/
+static/
 staticfiles/
-
+.pytest_cache/
+.mypy_cache/
 
 
 

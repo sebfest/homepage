@@ -3,17 +3,17 @@ import random
 
 from django.utils import timezone
 from django.utils.text import slugify
+from django.conf import settings
 from factory import LazyAttribute, SubFactory, Faker
 from factory.django import DjangoModelFactory
 from factory.fuzzy import FuzzyDateTime
 
 from blog.models import Post
-from config.settings import local
 
 
 class UserFactory(DjangoModelFactory):
     class Meta:
-        model = local.AUTH_USER_MODEL
+        model = settings.AUTH_USER_MODEL
         django_get_or_create = ('username',)
 
     first_name = Faker('first_name')

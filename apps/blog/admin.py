@@ -78,8 +78,9 @@ class PostAdmin(admin.ModelAdmin):
 
     @admin.action(description='Publish selected Post')
     def make_published(self, request: HttpRequest, queryset: QuerySet) -> None:
-        rows_updated = queryset.update(is_published=True)
-        for item in queryset:
+        selected_pks = list(queryset.values_list('pk', flat=True))
+        rows_updated = queryset.update(is_active=True)
+        for item in Post.objects.filter(pk__in=selected_pks):
             item.save()
         if rows_updated == 1:
             message_bit = 'One post was'
@@ -89,14 +90,15 @@ class PostAdmin(admin.ModelAdmin):
 
     @admin.action(description='Un-publish selected Post')
     def make_unpublished(self, request: HttpRequest, queryset: QuerySet) -> None:
-        rows_updated = queryset.update(is_published=False)
-        for item in queryset:
+        selected_pks = list(queryset.values_list('pk', flat=True))
+        rows_updated = queryset.update(is_active=False)
+        for item in Post.objects.filter(pk__in=selected_pks):
             item.save()
         if rows_updated == 1:
             message_bit = "One post was"
         else:
             message_bit = "%s posts were" % rows_updated
-        self.message_user(request, f'{message_bit} successfully marked as published.', messages.SUCCESS)
+        self.message_user(request, f'{message_bit} successfully marked as unpublished.', messages.SUCCESS)
 
 
 admin.site.register(Post, PostAdmin)

@@ -1,3 +1,0 @@
--r requirements.txt
-django-createsuperuserwithpassword>=2.0.0
-django-debug-toolbar>=3.7

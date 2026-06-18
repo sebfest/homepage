@@ -140,6 +140,7 @@ class Paper(AbstractBaseModel):
         blank=True,
         editable=False
     )
+    objects = PaperQuerySet.as_manager()
 
     class Meta:
         verbose_name = "Paper"
@@ -174,7 +175,8 @@ class Paper(AbstractBaseModel):
     @property
     def first_author(self):
         """Get first author."""
-        return self.authors.all().order_by('last_name')[0].last_name
+        author = self.authors.all().order_by('last_name').first()
+        return author.last_name if author else 'unknown'
 
     @property
     def author_names(self):

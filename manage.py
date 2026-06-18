@@ -20,7 +20,7 @@ def main():
         if path not in sys.path:
             sys.path.insert(index, path)
 
-    if os.environ['DEBUG'] == '1':
+    if os.environ.get('DEBUG') == '1':
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.local')
     else:
         os.environ.setdefault('DJANGO_SETTINGS_MODULE', 'config.settings.production')

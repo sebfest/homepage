@@ -11,6 +11,9 @@ class PostListView(ListView, ContextMixin):
     paginate_by = 3
     extra_context = {'header': 'Blog'}
 
+    def get_queryset(self):
+        return Post.objects.public()
+
 
 class PostTagListView(ListView, ContextMixin):
     template_name = 'blog/blog_index.html'
@@ -20,7 +23,7 @@ class PostTagListView(ListView, ContextMixin):
 
     def get_queryset(self):
         slug = self.kwargs.get('slug')
-        queryset = Post.objects.filter(tags__slug=slug)
+        queryset = Post.objects.public().filter(tags__slug=slug)
         return queryset
 
     def get_context_data(self, **kwargs):
@@ -35,6 +38,9 @@ class PostDetailView(DetailView, ContextMixin):
     context_object_name = 'post'
     extra_context = {'header': 'Blog'}
 
+    def get_queryset(self):
+        return Post.objects.public()
+
     def get_object(self, **kwargs):
         post = super(PostDetailView, self).get_object()
         post.is_viewed()
@@ -47,3 +53,6 @@ class PostArchiveView(ArchiveIndexView, ContextMixin):
     date_field = 'created_date'
     allow_empty = True
     extra_context = {'header': 'Archive'}
+
+    def get_queryset(self):
+        return Post.objects.public()
