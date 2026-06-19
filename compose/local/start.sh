@@ -12,6 +12,7 @@ python manage.py createsuperuserwithpassword \
         --email admin@example.org \
         --preserve
 python manage.py populate_blog
+python manage.py populate_research
 python manage.py collectstatic --no-input --clear
 python manage.py runserver 0.0.0.0:8000
 

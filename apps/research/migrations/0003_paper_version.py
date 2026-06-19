@@ -2,7 +2,6 @@
 
 import datetime
 from django.db import migrations, models
-from django.utils.timezone import utc
 
 
 class Migration(migrations.Migration):
@@ -15,7 +14,7 @@ class Migration(migrations.Migration):
         migrations.AddField(
             model_name='paper',
             name='version',
-            field=models.DateTimeField(blank=True, default=datetime.datetime(2021, 8, 30, 9, 53, 54, 790786, tzinfo=utc), help_text='Date of version', verbose_name='version date'),
+            field=models.DateTimeField(blank=True, default=datetime.datetime(2021, 8, 30, 9, 53, 54, 790786, tzinfo=datetime.timezone.utc), help_text='Date of version', verbose_name='version date'),
             preserve_default=False,
         ),
     ]

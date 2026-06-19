@@ -33,7 +33,7 @@ INSTALLED_APPS = [
     'django.contrib.staticfiles',
     'django.contrib.sites',
     # Third party apps
-    'bootstrap5',
+    'django_bootstrap5',
     'tagulous',
     'markdownx',
 ]
@@ -103,7 +103,6 @@ AUTH_USER_MODEL = 'auth.User'
 LANGUAGE_CODE = 'en-us'
 TIME_ZONE = 'UTC'
 USE_I18N = True
-USE_L10N = True
 USE_TZ = True
 STATIC_URL = '/static/'
 STATIC_ROOT = BASE_DIR / 'static'
