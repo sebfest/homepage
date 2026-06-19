@@ -4,16 +4,41 @@
 
 {% load django_bootstrap5 %}
 
-{% block title %}Welcome!{% endblock %}
+{% block title %}Disclaimer{% endblock %}
 
-{% block main_title %}Title{% endblock %}
+{% block main_title %}Disclaimer{% endblock %}
 
 {% block content %}
 
     <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <p class="text-justify">Content here</p>
+            <p class="text-justify">
+                This is my personal homepage. The views, notes, blog posts, research summaries,
+                code examples, and other material published here are my own unless otherwise stated.
+                They do not necessarily represent the views of my current or former employers,
+                collaborators, affiliated institutions, or funders.
+            </p>
+            <p class="text-justify">
+                I try to keep the information on this site accurate and up to date, but I cannot
+                guarantee that everything is complete, current, or free from errors. Any material on
+                this site is provided for general informational purposes only and should not be treated
+                as professional, legal, financial, or other formal advice.
+            </p>
+            <p class="text-justify">
+                Some pages may link to external websites, services, datasets, papers, or software
+                repositories. I am not responsible for the content, availability, security, or privacy
+                practices of external sites.
+            </p>
+            <p class="text-justify">
+                Research material and code shared here may be experimental, incomplete, or maintained
+                only as time allows. You are responsible for checking licenses, citations, assumptions,
+                and suitability before reusing anything from this site.
+            </p>
+            <p class="text-justify">
+                By using this website, you agree that I am not liable for any loss, damage, or
+                inconvenience arising from reliance on the information or materials published here.
+            </p>
           </div>
         </div>
     </div>
