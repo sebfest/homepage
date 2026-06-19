@@ -6,14 +6,40 @@
 
 {% block title %}Welcome!{% endblock %}
 
-{% block main_title %}Title{% endblock %}
+{% block main_title %}Sebastian Fest{% endblock %}
 
 {% block content %}
 
     <div class="container">
         <div class="row">
           <div class="col-lg-8 col-md-10 mx-auto">
-            <p class="text-justify">Content here</p>
+            <p class="text-justify">
+                Hello! I’m Sebastian Fest, a data engineer at the Directorate of Fisheries in Bergen.
+                I work on building and maintaining data pipelines, databases, and analytics solutions
+                that support the management of marine resources. My daily work involves handling
+                large-scale fisheries statistics, regulatory data, and other information critical to
+                sustainable resource management. I mainly use Python and SQL, working with a mix of
+                on-prem infrastructure and cloud solutions such as Oracle and Azure.
+            </p>
+            <p class="text-justify">
+                My path into data engineering grew out of a background in research and data management.
+                Before joining the Directorate, I worked at the Centre for Experimental Research on
+                Fairness, Inequality and Rationality (FAIR), where I designed workflows for data
+                collection, supported research projects, and contributed to research infrastructure.
+                I also developed open-source tools such as ExpMotor for participant recruitment and
+                pyturk for integrating workflows with AWS MTurk.
+            </p>
+            <p class="text-justify">
+                I hold a PhD in Behavioral Economics from the Norwegian School of Economics, an M.Sc.
+                from the University of Bergen, and an intermediate diploma from the University of Potsdam.
+                My academic research has explored topics such as inequality, moral motivation, gender
+                differences, and incentive structures. For those interested, a selection of past projects
+                and papers is available on the <a href="{% url 'research:paper_list' %}">research page</a>.
+            </p>
+            <p class="text-justify">
+                I live with my family in Bergen, where we embrace the relentless rain of western Norway.
+                You can find the latest version of my <a href="{% get_media_prefix %}cv.pdf">CV here</a>.
+            </p>
           </div>
         </div>
     </div>
